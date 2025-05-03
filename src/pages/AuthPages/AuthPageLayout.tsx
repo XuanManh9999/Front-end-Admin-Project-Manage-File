@@ -21,12 +21,12 @@ export default function AuthLayout({
                 <img
                   width={231}
                   height={48}
-                  src="/images/logo/auth-logo.svg"
+                  src="https://simgbb.com/images/logo.png"
                   alt="Logo"
                 />
               </Link>
               <p className="text-center text-gray-400 dark:text-white/60">
-                Trang quản trị hệ thống học trực tuyến
+                Trang quản trị hệ thống quản lý file
               </p>
             </div>
           </div>

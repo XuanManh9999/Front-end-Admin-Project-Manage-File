@@ -1,23 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-
+import { CiLogout } from "react-icons/ci";
 // Assume these icons are imported from an icon library
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
   PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
-import { SiCriticalrole } from "react-icons/si";
 type NavItem = {
   name: string;
   icon: React.ReactNode;
@@ -31,11 +23,26 @@ const navItems: NavItem[] = [
     name: "Dashboard",
     subItems: [{ name: "Tổng quan", path: "/", pro: false }],
   },
-
   {
     icon: <UserCircleIcon />,
     name: "Quản lý người dùng",
     path: "/manage-user",
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: "Quản lý người vai trò",
+    path: "/manage-role",
+  },
+  {
+    icon: <PageIcon />,
+    name: "Báo cáo thống kê",
+    path: "/manage-report",
+  },
+  {
+    name: "Đăng xuất",
+    icon: <CiLogout />,
+    path: "/signin",
+    // subItems: [{ name: "Form Elements", path: "/blank", pro: false }],
   },
   // {
   //   name: "Quản lý vai trò",
@@ -303,33 +310,28 @@ const AppSidebar: React.FC = () => {
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
       <div
-        className={`py-2 flex justify-center ${
+        className={`py-4 flex items-center ${
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-        }`}>
-        <Link to="/">
+        } px-2`}>
+        <Link to="/" className="flex items-center">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="dark:hidden"
-                src="/images/logo/logo-removebg-preview.png"
+                className="dark:hidden h-10 w-auto object-contain"
+                src="https://simgbb.com/images/logo.png"
                 alt="Logo"
-                width={100}
-                height={40}
               />
               <img
-                className="hidden dark:block"
-                src="/images/logo/logo-removebg-preview.png"
+                className="hidden dark:block h-10 w-auto object-contain"
+                src="./images/logo/logo-dark.svg"
                 alt="Logo"
-                width={150}
-                height={40}
               />
             </>
           ) : (
             <img
-              src="/images/logo/logo-removebg-preview.png"
+              className="h-8 w-8 object-contain"
+              src="https://simgbb.com/images/logo.png"
               alt="Logo"
-              width={32}
-              height={32}
             />
           )}
         </Link>

@@ -19,8 +19,8 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import ManageUser from "./components/manage_user";
-import ManageCourse from "./components/manage_course";
 import ManageRole from "./components/manage_role";
+import ManageReport from "./components/manage_report";
 
 export default function App() {
   return (
@@ -32,8 +32,8 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
             <Route path="/manage-user" element={<ManageUser />} />
-            <Route path="/manage-course" element={<ManageCourse />} />
             <Route path="/manage-role" element={<ManageRole />} />
+            <Route path="/manage-report" element={<ManageReport />} />
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />

@@ -21,7 +21,19 @@ interface UsersProps {
   data: IUser[];
 }
 
-const columns: { key: any; label: string }[] = [
+const formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+const columns: { key: any; label: string; render?: (text: string) => string }[] = [
   { key: "id", label: "ID" },
   { key: "username", label: "Tên tài khoản" },
   { key: "phoneNumber", label: "Số điện thoại" },
@@ -30,8 +42,16 @@ const columns: { key: any; label: string }[] = [
   // { key: "avatar", label: "Avatar" },
   // { key: "background", label: "Ảnh bìa" },
   { key: "active", label: "Trạng thái" },
-  { key: "createdAt", label: "Ngày tạo" },
-  { key: "updatedAt", label: "Ngày cập nhật" },
+  { 
+    key: "createdAt", 
+    label: "Ngày tạo",
+    render: (text: string) => formatDate(text)
+  },
+  { 
+    key: "updatedAt", 
+    label: "Ngày cập nhật",
+    render: (text: string) => formatDate(text)
+  },
 ];
 export default function ManageUser() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -237,7 +257,7 @@ export default function ManageUser() {
     setOpenModal(false);
   };
 
-  const handleKeyDown = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (search.trim() !== "") {
         const response = await getUserByName(search);
@@ -352,8 +372,8 @@ export default function ManageUser() {
     <>
       <div className="">
         <PageMeta
-          title="React.js Blank Dashboard | TailAdmin - Next.js Admin Dashboard Template"
-          description="This is React.js Blank Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+          title="Quản lý người dùng"
+          description="Quản lý người dùng"
         />
         <PageBreadcrumb pageTitle="Quản lý người dùng" />
         <div className="flex justify-end mb-4">

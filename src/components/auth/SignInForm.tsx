@@ -13,6 +13,7 @@ export default function SignInForm() {
   const nav = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [dataLogin, setDataLogin] = useState<Auth>({
     username: "",
@@ -27,34 +28,39 @@ export default function SignInForm() {
   };
 
   const handleLoginAdmin = async () => {
-    const { status, refreshToken, accessToken } = await apiLogin(dataLogin);
-    if (status === 200) {
-      // Set accessToken hết hạn trong 1 giờ
-      Cookies.set("accessTokenAdmin", accessToken, { expires: 1 / 24 }); // 1 giờ = 1/24 ngày
-      // Set refreshToken hết hạn trong 1 ngày
-      Cookies.set("refreshTokenAdmin", refreshToken, { expires: 1 }); // 1 ngày = 1 ngày
+    setLoading(true);
+    try {
+      const { status, refreshToken, accessToken } = await apiLogin(dataLogin);
+      if (status === 200) {
+        // Set accessToken hết hạn trong 1 giờ
+        Cookies.set("accessTokenAdmin", accessToken, { expires: 1 / 24 }); // 1 giờ = 1/24 ngày
+        // Set refreshToken hết hạn trong 1 ngày
+        Cookies.set("refreshTokenAdmin", refreshToken, { expires: 1 }); // 1 ngày = 1 ngày
 
-      const { data, status: statusCurr } = await getCurrentUser();
-      console.log(data.roles[0].name);
+        const { data, status: statusCurr } = await getCurrentUser();
+        console.log(data.roles[0].name);
 
-      if (statusCurr === 200 && data && data.roles[0].name === "ROLE_ADMIN") {
-        message.success("Đăng nhập thành công");
-        localStorage.setItem("user", JSON.stringify(data));
-        localStorage.setItem("isLogin", "true");
-        setTimeout(() => {
-          nav("/");
-        }, 1000);
+        if (statusCurr === 200 && data && data.roles[0].name === "ROLE_ADMIN") {
+          message.success("Đăng nhập thành công");
+          localStorage.setItem("user", JSON.stringify(data));
+          localStorage.setItem("isLogin", "true");
+          setTimeout(() => {
+            nav("/");
+          }, 1000);
+        } else {
+          message.error(
+            "Đăng nhập thất bại bạn không có quyền truy cập vào trang này"
+          );
+          Cookies.remove("accessTokenAdmin");
+          Cookies.remove("refreshTokenAdmin");
+        }
       } else {
         message.error(
-          "Đăng nhập thất bại bạn không có quyền truy cập vào trang này"
+          "Đăng nhập không thành công vui lòng kiểm tra lại tài khoản và mật khẩu"
         );
-        Cookies.remove("accessTokenAdmin");
-        Cookies.remove("refreshTokenAdmin");
       }
-    } else {
-      message.error(
-        "Đăng nhập không thành công vui lòng kiểm tra lại tài khoản và mật khẩu"
-      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,7 +121,13 @@ export default function SignInForm() {
                   </Link>
                 </div> */}
               <div>
-                <Button className="w-full" size="sm" onClick={handleLoginAdmin}>
+                <Button
+                  className="w-full"
+                  size="sm"
+                  onClick={handleLoginAdmin}
+                  loading={loading}
+                  disabled={loading}
+                >
                   Đăng nhập
                 </Button>
               </div>
